@@ -32,6 +32,7 @@ class SimCTG(nn.Module):
         print ('eos token is {}, eos token id is {}'.format(self.eos_token, self.eos_token_id))
         self.model = GPT2LMHeadModel.from_pretrained(model_name)
         self.vocab_size = len(self.tokenizer)
+        print(self.vocab_size)
         print ('Resizing model embedding...')
         self.model.resize_token_embeddings(len(self.tokenizer)) 
         print ('Model embedding resized!')
