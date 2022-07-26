@@ -33,9 +33,9 @@ eos_token = '<|endoftext|>'
 # for image_name in image_name_list:
 
 # image_path = r'./image_captioning/example_images/' + image_name
-image_instance = Image.open(r'./image_captioning/example_images/' + image_name_list[0])
+# image_instance = Image.open(r'./image_captioning/example_images/' + image_name_list[0])
 
-# image_instance = [Image.open(r'./image_captioning/example_images/' + image_name) for image_name in image_name_list]
+image_instance = [Image.open(r'./image_captioning/example_images/' + image_name) for image_name in image_name_list]
 
 output = generation_model.magic_search(input_ids, k, alpha, decoding_len, beta, image_instance, clip, 60)
 print(output)
