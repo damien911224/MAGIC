@@ -238,11 +238,13 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     next_probs = F.softmax(logit_for_next_step, dim = -1)
     _, top_k_ids = torch.topk(logit_for_next_step, dim = -1, k = beam_width)
     top_k_probs = torch.gather(next_probs, dim = 1, index=top_k_ids)
+    print(top_k_ids.shape)
+    exit()
 
     # compute the new hidden
     past_key_values = enlarge_past_key_values(past_key_values, beam_width)
     output = model(
-        input_ids=top_k_ids.view(-1, 1) ,
+        input_ids=top_k_ids.unsqueeze(-1),
         attention_mask=torch.ones_like(top_k_ids.unsqueeze(-1)),
         past_key_values=past_key_values,
         output_hidden_states=True,
@@ -256,7 +258,7 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     # prepare for the classification model
     input_ids_for_class_ = torch.cat([
         input_ids_for_class.unsqueeze(1).expand(-1, beam_width, -1).reshape(bsz*beam_width, seqlen),
-        top_k_ids.unsqueeze(-1)
+        top_k_ids.unsqueeze(0)
         ], dim=-1
     )
 
