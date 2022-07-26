@@ -92,13 +92,11 @@ class CLIP(nn.Module):
         text_embeds = text_embeds / text_embeds.norm(dim=-1, keepdim=True)
         logit_scale = self.model.logit_scale.exp()
         # logits_per_text = torch.matmul(text_embeds, image_embeds.t()) * logit_scale
-        print(image_embeds.shape)
-        print(text_embeds.shape)
-        exit()
         bs, c = image_embeds.shape
         text_embeds = text_embeds.reshape(bs, -1, c)
         logits_per_text = torch.bmm(text_embeds, image_embeds) * logit_scale
-        logits_per_image = logits_per_text.T
+        # logits_per_image = logits_per_text.T
+        logits_per_image = logits_per_text
         return logits_per_image.softmax(dim=1) # 1 x len(text_list)
 
     def compute_image_text_similarity_via_raw_text(self, image_embeds, text_list):
