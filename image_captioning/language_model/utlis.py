@@ -216,7 +216,7 @@ def plug_and_play_fast_ranking(
     cosine_matrix = torch.matmul(norm_context_hidden, norm_next_hidden.transpose(1,2)).squeeze(-1)
     scores, _ = torch.max(cosine_matrix, dim = -1)
     next_top_k_probs = next_top_k_probs.view(-1)
-    print(next_top_k_probs.shape)
+    print(batch_class_score.shape)
     print(next_top_k_probs.shape)
     exit()
     scores = (1.0 - alpha) * next_top_k_probs - alpha * scores + beta * batch_class_score.view([beam_width])
