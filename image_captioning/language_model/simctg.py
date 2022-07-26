@@ -32,7 +32,6 @@ class SimCTG(nn.Module):
         print ('eos token is {}, eos token id is {}'.format(self.eos_token, self.eos_token_id))
         self.model = GPT2LMHeadModel.from_pretrained(model_name)
         self.vocab_size = len(self.tokenizer)
-        print(self.vocab_size)
         print ('Resizing model embedding...')
         self.model.resize_token_embeddings(len(self.tokenizer)) 
         print ('Model embedding resized!')
@@ -172,7 +171,8 @@ class SimCTG(nn.Module):
         end_time = datetime.datetime.now()
         time_diff = (end_time - start_time)
         execution_time = time_diff.total_seconds() * 1000
-        return self.parse_output_token_list(input_ids_for_class[0])
+        # return self.parse_output_token_list(input_ids_for_class[0])
+        return last_hidden_states, input_ids_for_class
 
     def fast_contrastive_search(self, input_ids, beam_width, alpha, decoding_len):
         '''
