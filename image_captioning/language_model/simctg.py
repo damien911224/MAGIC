@@ -144,6 +144,7 @@ class SimCTG(nn.Module):
 
         image_embeds = clip.compute_image_representation_from_image_instance(image_instance)
         print(image_embeds)
+        exit()
 
         start_time = datetime.datetime.now()
 
