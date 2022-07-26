@@ -94,6 +94,7 @@ class CLIP(nn.Module):
         # logits_per_text = torch.matmul(text_embeds, image_embeds.t()) * logit_scale
         print(image_embeds.shape)
         print(text_embeds.shape)
+        exit()
         bs, c = image_embeds.shape
         text_embeds = text_embeds.reshape(bs, -1, c)
         logits_per_text = torch.bmm(text_embeds, image_embeds) * logit_scale
