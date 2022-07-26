@@ -95,7 +95,6 @@ class CLIP(nn.Module):
         print(text_embeds.shape)
         print(image_embeds.shape)
         logits_per_text = torch.bmm(text_embeds, image_embeds.permute(0, 2, 1)) * logit_scale
-        print(logits_per_text.shape)
         logits_per_image = logits_per_text.T
         return logits_per_image.softmax(dim=1) # 1 x len(text_list)
 
