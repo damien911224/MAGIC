@@ -168,12 +168,11 @@ class SimCTG(nn.Module):
                 first_step=step==0,
                 input_ids_for_class=input_ids_for_class,
             )
-            print(input_ids.shape)
         end_time = datetime.datetime.now()
         time_diff = (end_time - start_time)
         execution_time = time_diff.total_seconds() * 1000
-        return self.parse_output_token_list(input_ids_for_class[0])
-        # return last_hidden_states, input_ids_for_class
+        # return self.parse_output_token_list(input_ids_for_class[0])
+        return last_hidden_states, input_ids_for_class
 
     def fast_contrastive_search(self, input_ids, beam_width, alpha, decoding_len):
         '''
