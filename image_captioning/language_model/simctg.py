@@ -143,7 +143,7 @@ class SimCTG(nn.Module):
         input_ids_for_class = input_ids.clone()
 
         image_embeds = clip.compute_image_representation_from_image_instance(image_instance)
-        print(image_embeds)
+        print(image_embeds.shape)
         exit()
 
         start_time = datetime.datetime.now()
