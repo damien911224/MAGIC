@@ -265,9 +265,7 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
 
     batch_text_list = []
     for one_input_id in input_ids_for_class_:
-        print(one_input_id.shape)
-        # one_text = simctg_tokenizer.decode(one_input_id[prefix_len:][-clip_text_max_len:])
-        one_text = simctg_tokenizer.decode(one_input_id)
+        one_text = simctg_tokenizer.decode(one_input_id[prefix_len:][-clip_text_max_len:])
         # we only consider the class score of the generated text continuation
         batch_text_list.append(one_text)
     batch_score = clip.compute_image_text_similarity_via_raw_text(image_embeds, batch_text_list)
