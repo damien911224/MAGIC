@@ -22,7 +22,7 @@ clip.eval()
 sos_token = r'<-start_of_text->'
 start_token = generation_model.tokenizer.tokenize(sos_token)
 start_token_id = generation_model.tokenizer.convert_tokens_to_ids(start_token)
-input_ids = torch.LongTensor(start_token_id).view(1,-1).to(device)
+input_ids = torch.LongTensor(start_token_id).view(1,-1).repeat(12, 1).to(device)
 
 image_name_list = ['COCO_val2014_000000336777.jpg', 'COCO_val2014_000000182784.jpg', 'COCO_val2014_000000299319.jpg', 'COCO_val2014_000000516750.jpg',
                    'COCO_val2014_000000207151.jpg', 'COCO_val2014_000000078707.jpg', 'COCO_val2014_000000027440.jpg', 'COCO_val2014_000000033645.jpg',
@@ -30,13 +30,13 @@ image_name_list = ['COCO_val2014_000000336777.jpg', 'COCO_val2014_000000182784.j
 
 k, alpha, beta, decoding_len = 45, 0.1, 2.0, 16
 eos_token = '<|endoftext|>'
-for image_name in image_name_list:
-    image_path = r'./image_captioning/example_images/' + image_name
-    image_instance = Image.open(image_path)
+# for image_name in image_name_list:
 
-    output = generation_model.magic_search(input_ids, k,
-            alpha, decoding_len, beta, image_instance, clip, 60)
-    print(output)
+# image_path = r'./image_captioning/example_images/' + image_name
+image_instance = [Image.open(r'./image_captioning/example_images/' + image_name) for image_name in image_name_list]
+
+output = generation_model.magic_search(input_ids, k, alpha, decoding_len, beta, image_instance, clip, 60)
+print(output)
 
 # A street sign with a building in the background.
 # A large cow standing in a street stall.
