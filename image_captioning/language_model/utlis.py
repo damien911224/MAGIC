@@ -216,7 +216,7 @@ def plug_and_play_fast_ranking(
     cosine_matrix = torch.matmul(norm_context_hidden, norm_next_hidden.transpose(1,2)).squeeze(-1)
     scores, _ = torch.max(cosine_matrix, dim = -1)
     next_top_k_probs = next_top_k_probs.view(-1)
-    scores = (1.0 - alpha) * next_top_k_probs - alpha * scores + beta * batch_class_score.view([beam_width])
+    scores = (1.0 - alpha) * next_top_k_probs - alpha * scores + beta * batch_class_score.view([1, beam_width])
     scores = torch.stack(torch.split(scores, beam_width))
     selected_idx = scores.max(dim=-1)[1]
     return selected_idx
@@ -243,7 +243,7 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     past_key_values = enlarge_past_key_values(past_key_values, beam_width)
     output = model(
         input_ids=top_k_ids.view(-1, 1) ,
-        attention_mask=torch.ones_like(top_k_ids.view(-1, 1)),
+        attention_mask=torch.ones_like(top_k_ids.unsqueeze(-1)),
         past_key_values=past_key_values,
         output_hidden_states=True,
         use_cache=True,
@@ -256,7 +256,7 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     # prepare for the classification model
     input_ids_for_class_ = torch.cat([
         input_ids_for_class.unsqueeze(1).expand(-1, beam_width, -1).reshape(bsz*beam_width, seqlen),
-        top_k_ids.view(-1, 1)
+        top_k_ids.unsqueeze(-1)
         ], dim=-1
     )
 
@@ -276,7 +276,7 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
         beta, 
         batch_score,
         beam_width,
-    )       
+    )
 
     # prepare for the next step
     next_id = top_k_ids[range(len(top_k_ids)), selected_idx].unsqueeze(-1)
