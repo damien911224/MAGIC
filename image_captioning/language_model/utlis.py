@@ -258,7 +258,7 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     
     # prepare for the classification model
     input_ids_for_class_ = torch.cat([
-        input_ids_for_class.unsqueeze(1).expand(-1, beam_width, -1).reshape(bsz*beam_width, seqlen),
+        input_ids_for_class.unsqueeze(1).expand(-1, beam_width, -1).reshape(bsz * beam_width, seqlen),
         top_k_ids.view(-1, 1)
         ], dim=-1
     )
