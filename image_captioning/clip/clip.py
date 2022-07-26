@@ -14,7 +14,6 @@ class CLIP(nn.Module):
         self.processor = CLIPProcessor.from_pretrained(model_name)
         from transformers import CLIPTokenizer
         self.tokenizer = CLIPTokenizer.from_pretrained(model_name)
-        self.cuda_has_been_checked = False
         print ('CLIP model initialized.')
 
     def check_cuda(self):
@@ -29,52 +28,52 @@ class CLIP(nn.Module):
 
     @torch.no_grad()
     def compute_image_representation_from_image_path(self, image_path):
-        if not self.cuda_has_been_checked:
-            self.check_cuda()
-            self.cuda_has_been_checked = True
-        else:
-            pass
+        # if not self.cuda_has_been_checked:
+        #     self.check_cuda()
+        #     self.cuda_has_been_checked = True
+        # else:
+        #     pass
         # image_path: the path of the image
         image = Image.open(image_path)
         inputs = self.processor(images=image, return_tensors="pt")
         pixel_values = inputs['pixel_values']
-        if self.cuda_available:
-            pixel_values = pixel_values.cuda(self.device)
+        # if self.cuda_available:
+        pixel_values = pixel_values.cuda()
         visual_outputs = self.model.vision_model(pixel_values=pixel_values)
         image_embeds = visual_outputs[1]
         image_embeds = self.model.visual_projection(image_embeds) # [1 x embed_dim]
         return image_embeds
 
     def compute_image_representation_from_image_instance(self, image):
-        if not self.cuda_has_been_checked:
-            self.check_cuda()
-            self.cuda_has_been_checked = True
-        else:
-            pass
+        # if not self.cuda_has_been_checked:
+        #     self.check_cuda()
+        #     self.cuda_has_been_checked = True
+        # else:
+        #     pass
         # image_path: the path of the image
         inputs = self.processor(images=image, return_tensors="pt")
         pixel_values = inputs['pixel_values']
-        if self.cuda_available:
-            pixel_values = pixel_values.cuda(self.device)
+        # if self.cuda_available:
+        pixel_values = pixel_values.cuda()
         visual_outputs = self.model.vision_model(pixel_values=pixel_values)
         image_embeds = visual_outputs[1]
         image_embeds = self.model.visual_projection(image_embeds) # [1 x embed_dim]
         return image_embeds
 
     def compute_text_representation(self, text_list):
-        if not self.cuda_has_been_checked:
-            self.check_cuda()
-            self.cuda_has_been_checked = True
-        else:
-            pass
+        # if not self.cuda_has_been_checked:
+        #     self.check_cuda()
+        #     self.cuda_has_been_checked = True
+        # else:
+        #     pass
         # text_list: a list of text
         text_inputs = self.tokenizer(text_list, padding=True, return_tensors="pt",
             max_length=self.tokenizer.max_len_single_sentence + 2, truncation=True)
         # self.tokenizer.max_len_single_sentence + 2 = 77
         input_ids, attention_mask = text_inputs['input_ids'], text_inputs['attention_mask']
-        if self.cuda_available:
-            input_ids = input_ids.cuda(self.device)
-            attention_mask = attention_mask.cuda(self.device)
+        # if self.cuda_available:
+        input_ids = input_ids.cuda()
+        attention_mask = attention_mask.cuda()
         text_outputs = self.model.text_model(
             input_ids=input_ids,
             attention_mask=attention_mask
@@ -108,35 +107,35 @@ class CLIP(nn.Module):
         '''
             # list of image instances
         '''
-        if not self.cuda_has_been_checked:
-            self.check_cuda()
-            self.cuda_has_been_checked = True
-        else:
-            pass
+        # if not self.cuda_has_been_checked:
+        #     self.check_cuda()
+        #     self.cuda_has_been_checked = True
+        # else:
+        #     pass
         # image_path: the path of the image
         inputs = self.processor(images=image_list, return_tensors="pt")
         pixel_values = inputs['pixel_values']
-        if self.cuda_available:
-            pixel_values = pixel_values.cuda(self.device)
+        # if self.cuda_available:
+        pixel_values = pixel_values.cuda()
         visual_outputs = self.model.vision_model(pixel_values=pixel_values)
         image_embeds = visual_outputs[1]
         image_embeds = self.model.visual_projection(image_embeds) # [1 x embed_dim]
         return image_embeds # len(image_list) x embed_dim
 
     def compute_batch_index_text_representation(self, text_list):
-        if not self.cuda_has_been_checked:
-            self.check_cuda()
-            self.cuda_has_been_checked = True
-        else:
-            pass
+        # if not self.cuda_has_been_checked:
+        #     self.check_cuda()
+        #     self.cuda_has_been_checked = True
+        # else:
+        #     pass
         # text_list: a list of text
         #text_inputs = self.tokenizer(text_list, padding=True, return_tensors="pt")
         text_inputs = self.tokenizer(text_list, padding=True, return_tensors="pt",
             max_length=self.tokenizer.max_len_single_sentence + 2, truncation=True)
         input_ids, attention_mask = text_inputs['input_ids'], text_inputs['attention_mask']
-        if self.cuda_available:
-            input_ids = input_ids.cuda(self.device)
-            attention_mask = attention_mask.cuda(self.device)
+        # if self.cuda_available:
+        input_ids = input_ids.cuda()
+        attention_mask = attention_mask.cuda()
         text_outputs = self.model.text_model(
             input_ids=input_ids,
             attention_mask=attention_mask
