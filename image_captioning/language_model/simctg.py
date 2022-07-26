@@ -169,8 +169,6 @@ class SimCTG(nn.Module):
                 first_step=step==0,
                 input_ids_for_class=input_ids_for_class,
             )
-            print(last_hidden_states.shape)
-            print(input_ids_for_class.shape)
         end_time = datetime.datetime.now()
         time_diff = (end_time - start_time)
         execution_time = time_diff.total_seconds() * 1000
