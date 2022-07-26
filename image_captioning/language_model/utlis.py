@@ -254,10 +254,16 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     context_hidden = last_hidden_states.unsqueeze(1).expand(-1, beam_width, -1, -1).reshape(bsz*beam_width, seqlen, embed_dim)
     
     # prepare for the classification model
+    # input_ids_for_class_ = torch.cat([
+    #     input_ids_for_class.unsqueeze(1).expand(-1, beam_width, -1).reshape(bsz*beam_width, seqlen),
+    #     top_k_ids.unsqueeze(-1)
+    #     ], dim=-1
+    # )
+
     input_ids_for_class_ = torch.cat([
-        input_ids_for_class.unsqueeze(1).expand(-1, beam_width, -1).reshape(bsz*beam_width, seqlen),
-        top_k_ids.unsqueeze(-1).unsqueeze(-1)
-        ], dim=-1
+        input_ids_for_class.unsqueeze(1).expand(-1, beam_width, -1).reshape(bsz * beam_width, seqlen),
+        top_k_ids
+    ], dim=-1
     )
 
     batch_text_list = []
