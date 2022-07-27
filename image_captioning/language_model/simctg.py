@@ -145,7 +145,7 @@ class SimCTG(nn.Module):
 
         image_embeds = clip.compute_image_representation_from_image_instance(image_instance)
 
-        start_time = datetime.datetime.now()
+        # start_time = datetime.datetime.now()
 
         # the maximum supported length of generation for SimCTG is 256
         # to support longer generated length, you can re-train the SimCTG model with longer sequences
@@ -169,9 +169,9 @@ class SimCTG(nn.Module):
                 first_step=step==0,
                 input_ids_for_class=input_ids_for_class,
             )
-        end_time = datetime.datetime.now()
-        time_diff = (end_time - start_time)
-        execution_time = time_diff.total_seconds() * 1000
+        # end_time = datetime.datetime.now()
+        # time_diff = (end_time - start_time)
+        # execution_time = time_diff.total_seconds() * 1000
         # return self.parse_output_token_list(input_ids_for_class[0])
         return last_hidden_states, input_ids_for_class
         # return [self.parse_output_token_list(tokens) for tokens in input_ids_for_class]
