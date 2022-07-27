@@ -29,7 +29,7 @@ image_name_list = ['COCO_val2014_000000336777.jpg', 'COCO_val2014_000000182784.j
                    'COCO_val2014_000000207151.jpg', 'COCO_val2014_000000078707.jpg', 'COCO_val2014_000000027440.jpg', 'COCO_val2014_000000033645.jpg',
                    'COCO_val2014_000000348905.jpg', 'COCO_val2014_000000545385.jpg', 'COCO_val2014_000000210032.jpg', 'COCO_val2014_000000577526.jpg']
 
-k, alpha, beta, decoding_len = 5, 0.1, 2.0, 16
+k, alpha, beta, decoding_len = 9, 0.1, 2.0, 16
 eos_token = '<|endoftext|>'
 # for image_name in image_name_list:
 
