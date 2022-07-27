@@ -17,6 +17,7 @@ generation_model.eval()
 
 model_name = r"openai/clip-vit-base-patch32" # or r"/path/to/downloaded/openai/clip-vit-base-patch32"
 clip = CLIP(model_name).to(device)
+clip.cuda_available = True
 clip.eval()
 
 sos_token = r'<-start_of_text->'
