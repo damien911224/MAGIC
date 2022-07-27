@@ -229,9 +229,6 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
         model: the generation model, e.g., gpt2
         input_ids: 1 x seqlen
     '''
-
-    start_time = time.time()
-
     if first_step:
         output = model(input_ids=input_ids, past_key_values=past_key_values, use_cache=True, output_hidden_states=True)
         past_key_values = output.past_key_values
@@ -241,10 +238,6 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     next_probs = F.softmax(logit_for_next_step, dim = -1)
     _, top_k_ids = torch.topk(logit_for_next_step, dim = -1, k = beam_width)
     top_k_probs = torch.gather(next_probs, dim = 1, index=top_k_ids)
-
-    print("1: {:.5f}".format(time.time() - start_time))
-
-    start_time = time.time()
 
     # compute the new hidden
     past_key_values = enlarge_past_key_values(past_key_values, beam_width)
@@ -260,10 +253,6 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     next_hidden = output.hidden_states[-1]
     context_hidden = last_hidden_states.unsqueeze(1).expand(-1, beam_width, -1, -1).reshape(bsz*beam_width, seqlen, embed_dim)
 
-    print("2: {:.5f}".format(time.time() - start_time))
-
-    start_time = time.time()
-
     # prepare for the classification model
     input_ids_for_class_ = torch.cat([
         input_ids_for_class.unsqueeze(1).expand(-1, beam_width, -1).reshape(bsz * beam_width, seqlen),
@@ -277,8 +266,6 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
         # we only consider the class score of the generated text continuation
         batch_text_list.append(one_text)
     batch_score = clip.compute_image_text_similarity_via_raw_text(image_embeds, batch_text_list)
-
-    print("3: {:.5f}".format(time.time() - start_time))
 
     start_time = time.time()
 
@@ -301,8 +288,6 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
     past_key_values = select_past_key_values(past_key_values, beam_width, selected_idx)
     logits = torch.stack(torch.split(logits, beam_width))[range(bsz), selected_idx, :]
     input_ids_for_class = torch.cat([input_ids_for_class, next_id], dim=-1)
-
-    print("4: {:.5f}".format(time.time() - start_time))
 
     return next_id, past_key_values, last_hidden_states, logits, input_ids_for_class
 

@@ -138,17 +138,12 @@ class SimCTG(nn.Module):
     @torch.no_grad()
     def magic_search(self, input_ids, beam_width, alpha, decoding_len, beta, image_instance, clip, 
         clip_text_max_len):#, add_token_level_score=False):
-
-        start_time = time.time()
-
         prefix_len = input_ids.size()[1]
         past_key_values, last_hidden_states, logits = None, None, None
         # generated = [item for item in input_ids.tolist()]
         input_ids_for_class = input_ids.clone()
 
         image_embeds = clip.compute_image_representation_from_image_instance(image_instance)
-
-        print("0: {:.5f}".format(time.time() - start_time))
 
         start_time = datetime.datetime.now()
 
