@@ -28,14 +28,14 @@ image_name_list = ['COCO_val2014_000000336777.jpg', 'COCO_val2014_000000182784.j
                    'COCO_val2014_000000207151.jpg', 'COCO_val2014_000000078707.jpg', 'COCO_val2014_000000027440.jpg', 'COCO_val2014_000000033645.jpg',
                    'COCO_val2014_000000348905.jpg', 'COCO_val2014_000000545385.jpg', 'COCO_val2014_000000210032.jpg', 'COCO_val2014_000000577526.jpg']
 
-k, alpha, beta, decoding_len = 45, 0.1, 2.0, 16
+k, alpha, beta, decoding_len = 1, 0.1, 2.0, 16
 eos_token = '<|endoftext|>'
 # for image_name in image_name_list:
 
 # image_path = r'./image_captioning/example_images/' + image_name
 # image_instance = Image.open(r'./image_captioning/example_images/' + image_name_list[0])
 
-image_instance = [Image.open(r'./image_captioning/example_images/' + image_name).resize(112, 112) for image_name in image_name_list]
+image_instance = [Image.open(r'./image_captioning/example_images/' + image_name) for image_name in image_name_list]
 
 output = generation_model.magic_search(input_ids, k, alpha, decoding_len, beta, image_instance, clip, 60)
 print(output)
