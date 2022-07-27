@@ -267,8 +267,6 @@ def PlugAndPlayContrastiveDecodingOneStepFast(model, input_ids, prefix_len, beam
         batch_text_list.append(one_text)
     batch_score = clip.compute_image_text_similarity_via_raw_text(image_embeds, batch_text_list)
 
-    start_time = time.time()
-
     selected_idx = plug_and_play_fast_ranking(
         context_hidden, 
         next_hidden, 
